@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenders</title>
+</head>
+<body>
+    <h1>Tenders</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Bidder Name</th>
+                <th>Bidder Link</th>
+                <th>Publication Date</th>
+                <th>Submission Deadline</th>
+                <th>CPV Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tender in tenders %}
+            <tr>
+                <td>{{ tender.title }}</td>
+                <td>{{ tender.bidder_name }}</td>
+                <td><a href="{{ tender.bidder_link }}" target="_blank">{{ tender.bidder_link }}</a></td>
+                <td>{{ tender.publication_date }}</td>
+                <td>{{ tender.submission_deadline }}</td>
+                <td>{{ tender.cpv_code }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No tenders found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
