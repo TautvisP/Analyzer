@@ -4,21 +4,36 @@ import TenderFilter from './components/TenderFilter';
 
 function App() {
   const [tenders, setTenders] = useState([]);
+  const [purchaseType, setPurchaseType] = useState('');
+  const [announcementType, setAnnouncementType] = useState('');
 
-  useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/tenders/')
+  const fetchTenders = () => {
+    axios.get('http://127.0.0.1:8000/api/tenders/', {
+      params: {
+        purchase_type: purchaseType,
+        announcement_type: announcementType
+      }
+    })
       .then(response => {
         setTenders(response.data);
       })
       .catch(error => {
         console.error('There was an error fetching the tenders!', error);
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    fetchTenders();
+  }, [purchaseType, announcementType]); // Fetch when filters change
 
   return (
     <div className="App">
       <h1>Filtering</h1>
-      <TenderFilter />
+      <TenderFilter
+        onPurchaseTypeChange={setPurchaseType}
+        onAnnouncementTypeChange={setAnnouncementType}
+      />
+
       <h1>Tenders</h1>
       <table>
         <thead>

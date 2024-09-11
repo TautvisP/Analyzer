@@ -61,6 +61,9 @@ def scrape_tenders(url):
                     print(f"Skipping tender {title} due to missing additional info.")
                     continue
 
+                # Print all gathered data in a single line
+                print(f"Appending tender - Title: {title}, Bidder Name: {bidder_name}, Bidder Link: {bidder_link}, Publication Date: {publication_date}, Submission Deadline: {submission_deadline}, CPV Code: {cpv_code}, Purchase Type: {purchase_type}, Announcement Type: {announcement_type}")
+
                 # Add data to the tenders list
                 tenders.append({
                     'title': title,
