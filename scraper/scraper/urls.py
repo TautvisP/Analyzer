@@ -16,8 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.http import HttpResponse
-from scraper_logic.views import home_view
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
@@ -30,8 +28,6 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('', home_view),
-    #path('', home_view, name='home'),  # Root URL pattern for home page
     path('api/', include('scraper_logic.urls')),
     path('', TemplateView.as_view(template_name='index.html')),  # Serve React app
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

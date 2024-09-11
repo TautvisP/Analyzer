@@ -1,21 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import TenderFilter from './components/TenderFilter';
 
 function App() {
   const [tenders, setTenders] = useState([]);
+  const [purchaseType, setPurchaseType] = useState('');
+  const [announcementType, setAnnouncementType] = useState('');
 
-  useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/tenders/')
+  const fetchTenders = useCallback(() => {
+    axios.get('http://127.0.0.1:8000/api/tenders/', {
+      params: {
+        purchase_type: purchaseType,
+        announcement_type: announcementType
+      }
+    })
       .then(response => {
         setTenders(response.data);
       })
       .catch(error => {
         console.error('There was an error fetching the tenders!', error);
       });
-  }, []);
+  }, [purchaseType, announcementType]);
+
+  useEffect(() => {
+    fetchTenders();
+  }, [fetchTenders]); // Fetch when filters change
 
   return (
     <div className="App">
+      <h1>Filtering</h1>
+      <TenderFilter
+        onPurchaseTypeChange={setPurchaseType}
+        onAnnouncementTypeChange={setAnnouncementType}
+      />
+
       <h1>Tenders</h1>
       <table>
         <thead>
