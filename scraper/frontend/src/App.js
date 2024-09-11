@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import TenderFilter from './components/TenderFilter';
 
 function App() {
   const [tenders, setTenders] = useState([]);
@@ -16,6 +17,8 @@ function App() {
 
   return (
     <div className="App">
+      <h1>Filtering</h1>
+      <TenderFilter />
       <h1>Tenders</h1>
       <table>
         <thead>
