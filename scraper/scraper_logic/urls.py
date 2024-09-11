@@ -1,21 +1,10 @@
 from django.urls import path
-from .views import TenderListView
-from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import TenderViewSet
-
-urlpatterns = [
-    #path('tenders/', TenderListView.as_view(), name='tender-list'),
-    #path('api/tenders/', TenderListView.as_view(), name='tender-list'),
-    path('tenders/', TenderListView.as_view(), name='tender-list-create'),
-]
-
+from .views import TenderListView
 
 router = DefaultRouter()
-router.register(r'tenders', TenderViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('tenders/', TenderListView.as_view(), name='tender-list'),  # Updated path for unfiltered and filtered tenders
+    path('', TenderListView.as_view(), name='home'),  # Assuming you want the home view to use the same view
 ]
-
-

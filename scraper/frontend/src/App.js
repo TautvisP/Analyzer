@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import TenderFilter from './components/TenderFilter';
 
@@ -7,7 +7,7 @@ function App() {
   const [purchaseType, setPurchaseType] = useState('');
   const [announcementType, setAnnouncementType] = useState('');
 
-  const fetchTenders = () => {
+  const fetchTenders = useCallback(() => {
     axios.get('http://127.0.0.1:8000/api/tenders/', {
       params: {
         purchase_type: purchaseType,
@@ -20,11 +20,11 @@ function App() {
       .catch(error => {
         console.error('There was an error fetching the tenders!', error);
       });
-  };
+  }, [purchaseType, announcementType]);
 
   useEffect(() => {
     fetchTenders();
-  }, [purchaseType, announcementType]); // Fetch when filters change
+  }, [fetchTenders]); // Fetch when filters change
 
   return (
     <div className="App">

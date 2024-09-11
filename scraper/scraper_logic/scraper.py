@@ -1,9 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from .models import Tender
+
+url = 'https://cvpp.eviesiejipirkimai.lt/'
 
 # Function to scrape tender data
-def scrape_tenders(url):
+def scrape_tenders():
+    tenders_added = False
+    print("Im Scraping")
     try:
         # Send HTTP GET request to fetch the webpage
         response = requests.get(url)
@@ -48,7 +53,6 @@ def scrape_tenders(url):
             # Parse dates into proper datetime objects
             publication_date = datetime.strptime(publication_date, "%Y-%m-%d")
             submission_deadline = datetime.strptime(submission_deadline, "%Y-%m-%d")
-            
 
             # Construct the full link to the secondary page using the extracted code
             if code:
@@ -61,26 +65,34 @@ def scrape_tenders(url):
                     print(f"Skipping tender {title} due to missing additional info.")
                     continue
 
-                # Print all gathered data in a single line
-                print(f"Appending tender - Title: {title}, Bidder Name: {bidder_name}, Bidder Link: {bidder_link}, Publication Date: {publication_date}, Submission Deadline: {submission_deadline}, CPV Code: {cpv_code}, Purchase Type: {purchase_type}, Announcement Type: {announcement_type}")
+                # Check if the tender already exists in the database based on the unique code
+                if Tender.objects.filter(cpv_code=cpv_code).exists():
+                    #print(f"Tender {title} with code {code} already exists. Skipping.")
+                    continue  # Skip this tender if it already exists
 
-                # Add data to the tenders list
-                tenders.append({
-                    'title': title,
-                    'bidder_name': bidder_name,
-                    'bidder_link': bidder_link,
-                    'publication_date': publication_date,
-                    'submission_deadline': submission_deadline,
-                    'cpv_code': cpv_code,
-                    'purchase_type': purchase_type,
-                    'announcement_type': announcement_type
-                })
+                #print(f"Appending tender - Title: {title}, Bidder Name: {bidder_name}, Bidder Link: {bidder_link}, Publication Date: {publication_date}, Submission Deadline: {submission_deadline}, CPV Code: {cpv_code}, Purchase Type: {purchase_type}, Announcement Type: {announcement_type}")
 
-        return tenders
+                # Create a new Tender object
+                tender = Tender(
+                    title=title,
+                    bidder_name=bidder_name,
+                    bidder_link=bidder_link,
+                    publication_date=publication_date,
+                    submission_deadline=submission_deadline,
+                    cpv_code=cpv_code,
+                    purchase_type=purchase_type,
+                    announcement_type=announcement_type
+                )
+                # Save the Tender object to the database
+                tender.save()
+                tenders_added = True
+
 
     except requests.exceptions.RequestException as e:
         print(f"Error fetching data from {url}: {e}")
         return []
+    
+    return tenders_added
 
 
 # Function to scrape secondary webpage
