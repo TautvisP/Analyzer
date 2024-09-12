@@ -1,16 +1,20 @@
 from rest_framework import generics
-from .models import Tender
 from .serializers import TenderSerializer
 from django.core.management import call_command  # To call the custom management command
 from django.utils.dateparse import parse_date
-from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.core.management import call_command
-from django.http import JsonResponse
 from django.db.models import Count
 from datetime import datetime, timedelta
 from .models import Tender
+from rest_framework import permissions, serializers, viewsets
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.contrib.auth import authenticate, login, logout
+from .models import User
+from rest_framework.decorators import api_view
+from .serializers import UserSerializer
 
 class TenderListView(generics.ListCreateAPIView):
     print("Searching and returning all tenders")
@@ -90,3 +94,59 @@ def get_statistics(request):
         'purchaseTypeStats': purchase_type_stats_dict,
         'announcementTypeStats': announcement_type_stats_dict,
     })
+
+#--------------------------------------------------------------------------------------------------------------------------#
+#User Authentication Views#
+
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'password', 'email')
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
+
+class RegisterView(APIView):
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()  # This ensures the user is saved to the database
+            return Response({'message': 'User registered successfully'}, status=201)
+        return Response(serializer.errors, status=400)
+
+
+class LoginView(APIView):
+    def post(self, request):
+        username = request.data.get('username', '').strip()
+        password = request.data.get('password', '').strip()
+        
+        print(f'Request data in login view |{username}| |{password}|')  # Debug print
+
+        # Authenticate the user
+        user = authenticate(username=username, password=password)
+        print(f'Authentication result: {user}')  # Debug the result of authenticate()
+        
+        if user is not None:
+            print("User authenticated")
+            login(request, user)
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key})
+        
+        print("Authentication failed")
+        return Response({'error': 'Invalid credentials'}, status=400)
+
+
+
+class LogoutView(APIView):
+    def post(self, request):
+        request.user.auth_token.delete()
+        logout(request)
+        return Response({'status': 'Logged out'})
+    
+@api_view(['GET'])
+def check_auth(request):
+    if request.user.is_authenticated:
+        return JsonResponse({'status': 'authenticated'}, status=200)
+    else:
+        return JsonResponse({'status': 'unauthenticated'}, status=401)
