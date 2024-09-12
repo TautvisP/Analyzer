@@ -3,12 +3,11 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from .models import Tender
 
-url = 'https://cvpp.eviesiejipirkimai.lt/'
 
 # Function to scrape tender data
-def scrape_tenders():
+def scrape_tenders(url):
     tenders_added = False
-    print("Im Scraping")
+    print("Im Scraping, please wait")
     try:
         # Send HTTP GET request to fetch the webpage
         response = requests.get(url)
@@ -67,8 +66,8 @@ def scrape_tenders():
 
                 # Check if the tender already exists in the database based on the unique code
                 if Tender.objects.filter(cpv_code=cpv_code).exists():
-                    #print(f"Tender {title} with code {code} already exists. Skipping.")
-                    continue  # Skip this tender if it already exists
+                    print(f"Tender {title} with code {cpv_code} already exists. Stopping further scraping.")
+                    break
 
                 #print(f"Appending tender - Title: {title}, Bidder Name: {bidder_name}, Bidder Link: {bidder_link}, Publication Date: {publication_date}, Submission Deadline: {submission_deadline}, CPV Code: {cpv_code}, Purchase Type: {purchase_type}, Announcement Type: {announcement_type}")
 

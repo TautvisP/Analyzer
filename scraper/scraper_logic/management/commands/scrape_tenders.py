@@ -6,7 +6,9 @@ class Command(BaseCommand):
     help = 'Scrapes tender data from the target website and saves it to the database'
 
     def handle(self, *args, **kwargs):
-        scraped_data = scrape_tenders()
+        #url = 'https://cvpp.eviesiejipirkimai.lt/'
+        url = 'https://cvpp.eviesiejipirkimai.lt/?SelectedTextFilter=&Query=&OrderingType=0&OrderingDirection=0&IncludeExpired=false&Cpvs=&TenderId=&EpsReferenceNr=&DeadlineFromDate=&DeadlineToDate=&PublishedFromDate=&PublishedToDate=&IsGreenProcurement=false&PageNumber=1&PageSize=1500'
+        scraped_data = scrape_tenders(url)
 
         if scraped_data == False:
             self.stdout.write(self.style.ERROR('No data was scraped.'))
