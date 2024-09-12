@@ -1,5 +1,4 @@
-// App.js
-import React, { useState, useEffect, useCallback } from 'react'; 
+import React, { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 import TenderFilter from './components/TenderFilter';
 import DataVisualization from './components/DataVisualization';
@@ -26,19 +25,16 @@ const App = () => {
 
   const sortTendersByDate = (tenderList) => {
     return tenderList.sort((a, b) => {
-      // Primary sort by publication date (descending)
       const dateComparison = new Date(b.publication_date) - new Date(a.publication_date);
-      
-      // If publication dates are equal, sort by id (descending)
       if (dateComparison === 0) {
         return b.id - a.id;
       }
-      
       return dateComparison;
     });
   };
+
   const fetchTenders = useCallback(() => {
-    setLoading(true); 
+    setLoading(true);
     axios.get('http://127.0.0.1:8000/api/tenders/', {
       params: {
         purchase_type: purchaseType,
@@ -64,22 +60,41 @@ const App = () => {
 
   const handleRefresh = () => {
     setRefreshing(true);
-    window.scrollTo(0, 0); // Scroll to top
+    window.scrollTo(0, 0);
     axios.post('http://127.0.0.1:8000/api/refresh-tenders/')
       .then(response => {
         if (response.data.status === 'success') {
-          fetchTenders(); // Refresh the tender list after successful scraping
+          fetchTenders();
         }
       })
       .finally(() => setRefreshing(false));
+  };
+
+  const handleScrollToBottom = () => {
+    window.scrollTo(0, document.body.scrollHeight);
+  };
+
+  const handleClearFilters = () => {
+    setPurchaseType('');
+    setAnnouncementType('');
+    setDateFrom('');
+    setDateTo('');
   };
 
   return (
     <AuthProvider>
       <Router>
         <header className="header">
-          <h1 className="title">Duomenų gavybos, apdorojimo ir vizualizavimo sistemos prototipas</h1>
+          <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+            <h1 className="title" style={{ margin: '0 auto' }}>Duomenų gavybos, apdorojimo ir vizualizavimo sistemos prototipas</h1>
+            <div>
+              <Logout />
+            </div>
+          </div>
         </header>
+
+        {loading && !refreshing && <div className="loading-bar"></div>}
+
         <div className="App">
           <Routes>
             <Route path="/login" element={<Login />} />
@@ -93,50 +108,65 @@ const App = () => {
                     <div>
                       <h1>Filtravimas</h1>
                       <TenderFilter
+                        purchaseType={purchaseType}
+                        announcementType={announcementType}
+                        dateFrom={dateFrom}
+                        dateTo={dateTo}
                         onPurchaseTypeChange={setPurchaseType}
                         onAnnouncementTypeChange={setAnnouncementType}
                         onDateFromChange={setDateFrom}
                         onDateToChange={setDateTo}
                       />
-                      <Logout/>
-                      <h1>Viešieji Pirkimai</h1>
+                      <table className="actions-table">
+                        <tbody>
+                          <tr>
+                            <td className="button-cell">
+                              <button className="clear-filters-button" onClick={handleClearFilters}>Išvalyti Filtrus</button>
+                            </td>
+                            <td className="button-cell">
+                              <button className="refresh-button" onClick={handleRefresh}>Atnaujinti Duomenis</button>
+                            </td>
+                            <td className="button-cell">
+                              <button className="scroll-to-bottom-button" onClick={handleScrollToBottom}>Duomenų Vizualizacija</button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
 
-                      {refreshing && <div className="loading-bar"></div>}
+                      <h1>Viešieji Pirkimai</h1>
+                      {refreshing && <div className="loading-bar-refresh"></div>}
                       {loading && !refreshing && <div className="spinner"></div>}
                       {loading && <p>Kraunamas pirkimų sąrašas, prašome palaukti...</p>}
                       {!loading && tenders.length === 0 ? (
-                        <p>Su pasirinktais filtrais pirkimų nerasta</p>
+                        <p className="no-tenders-message">Su pasirinktais filtrais pirkimų nerasta</p>
                       ) : (
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Skelbimo Pavadinimas</th>
-                            <th>Vykdytojas</th>
-                            <th>Paskelbimo Data</th>
-                            <th>Terminas</th>
-                            <th>BVPŽ Kodas</th>
-                            <th>Pirkimo Rūšis</th>
-                            <th>Skelbimo Tipas</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {tenders.map(tender => (
-                            <tr key={tender.id}>
-                              <td>{tender.title}</td>
-                              <td><a href={tender.bidder_link} target="_blank" rel="noopener noreferrer">{tender.bidder_name}</a></td>
-                              <td>{tender.publication_date}</td>
-                              <td>{tender.submission_deadline}</td>
-                              <td>{tender.cpv_code}</td>
-                              <td>{tender.announcement_type}</td>
-                              <td>{tender.purchase_type}</td>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Skelbimo Pavadinimas</th>
+                              <th>Vykdytojas</th>
+                              <th>Paskelbimo Data</th>
+                              <th>Terminas</th>
+                              <th>BVPŽ Kodas</th>
+                              <th>Pirkimo Rūšis</th>
+                              <th>Skelbimo Tipas</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {tenders.map(tender => (
+                              <tr key={tender.id}>
+                                <td>{tender.title}</td>
+                                <td><a href={tender.bidder_link} target="_blank" rel="noopener noreferrer">{tender.bidder_name}</a></td>
+                                <td>{tender.publication_date}</td>
+                                <td>{tender.submission_deadline}</td>
+                                <td>{tender.cpv_code}</td>
+                                <td>{tender.announcement_type}</td>
+                                <td>{tender.purchase_type}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
                       )}
-                      <div className="refresh-button-container">
-                        <button className="refresh-button" onClick={handleRefresh}>Atnaujinti Duomenis</button>
-                      </div>
                       <div className="Charts">
                         <h1>Duomenų Vizualizacija</h1>
                         <DataVisualization />

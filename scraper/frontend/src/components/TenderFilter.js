@@ -1,30 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function TenderFilter({ onPurchaseTypeChange, onAnnouncementTypeChange, onDateFromChange, onDateToChange }) {
-  const [purchaseType, setPurchaseType] = useState('');
-  const [announcementType, setAnnouncementType] = useState('');
-  const [dateFrom, setDateFrom] = useState('');
-  const [dateTo, setDateTo] = useState('');
+function TenderFilter({
+  onPurchaseTypeChange,
+  onAnnouncementTypeChange,
+  onDateFromChange,
+  onDateToChange,
+  purchaseType = '',
+  announcementType = '',
+  dateFrom = '',
+  dateTo = ''
+}) {
+  const [localPurchaseType, setLocalPurchaseType] = useState(purchaseType);
+  const [localAnnouncementType, setLocalAnnouncementType] = useState(announcementType);
+  const [localDateFrom, setLocalDateFrom] = useState(dateFrom);
+  const [localDateTo, setLocalDateTo] = useState(dateTo);
 
-  // Function to handle the "Clear Filters" button
-  const clearFilters = () => {
-    setPurchaseType('');
-    setAnnouncementType('');
-    setDateFrom('');
-    setDateTo('');
-    onPurchaseTypeChange('');
-    onAnnouncementTypeChange('');
-    onDateFromChange('');
-    onDateToChange('');
-  };
+  useEffect(() => {
+    setLocalPurchaseType(purchaseType);
+    setLocalAnnouncementType(announcementType);
+    setLocalDateFrom(dateFrom);
+    setLocalDateTo(dateTo);
+  }, [purchaseType, announcementType, dateFrom, dateTo]);
 
   return (
     <div className="tender-filter">
       <label>Pirkimo Rūšis:</label>
       <select
-        value={purchaseType}
+        value={localPurchaseType}
         onChange={e => {
-          setPurchaseType(e.target.value);
+          setLocalPurchaseType(e.target.value);
           onPurchaseTypeChange(e.target.value);
         }}
       >
@@ -36,9 +40,9 @@ function TenderFilter({ onPurchaseTypeChange, onAnnouncementTypeChange, onDateFr
 
       <label>Skelbimo Tipas:</label>
       <select
-        value={announcementType}
+        value={localAnnouncementType}
         onChange={e => {
-          setAnnouncementType(e.target.value);
+          setLocalAnnouncementType(e.target.value);
           onAnnouncementTypeChange(e.target.value);
         }}
       >
@@ -54,9 +58,9 @@ function TenderFilter({ onPurchaseTypeChange, onAnnouncementTypeChange, onDateFr
       <label>Data Nuo:</label>
       <input
         type="date"
-        value={dateFrom}
+        value={localDateFrom}
         onChange={e => {
-          setDateFrom(e.target.value);
+          setLocalDateFrom(e.target.value);
           onDateFromChange(e.target.value);
         }}
       />
@@ -64,15 +68,12 @@ function TenderFilter({ onPurchaseTypeChange, onAnnouncementTypeChange, onDateFr
       <label>Data Iki:</label>
       <input
         type="date"
-        value={dateTo}
+        value={localDateTo}
         onChange={e => {
-          setDateTo(e.target.value);
+          setLocalDateTo(e.target.value);
           onDateToChange(e.target.value);
         }}
       />
-
-      {/* Clear Filters Button */}
-      <button className="clear-filters-button" onClick={clearFilters}>Išvalyti Filtrus</button>
     </div>
   );
 }

@@ -53,28 +53,28 @@ function DataVisualization() {
       });
   }, []);
 
-    // Define chart options with legend turned off
-    const chartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false // Turn off the legend
-          }
-        }
-      };
+  // Define chart options with legend turned off
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false // Turn off the legend
+      }
+    }
+  };
   return (
     <div className="chart-container">
-    <div className="chart">
-      <h2>Skelbimų Kiekis Per Savaitę Pagal Pirkimo Rūšį</h2>
-      <Bar data={data.purchaseTypeData} options={chartOptions} />
-    </div>
+      <div className="chart">
+        <h2>Skelbimų Kiekis Per Savaitę Pagal Pirkimo Rūšį</h2>
+        <Bar data={data.purchaseTypeData} options={chartOptions} />
+      </div>
 
-    <div className="chart">
-      <h2>Skelbimų Kiekis Per Savaitę Pagal Skelbimų Tipą</h2>
-      <Bar data={data.announcementTypeData} options={chartOptions} />
+      <div className="chart">
+        <h2>Skelbimų Kiekis Per Savaitę Pagal Skelbimų Tipą</h2>
+        <Bar data={data.announcementTypeData} options={chartOptions} />
+      </div>
     </div>
-  </div>
   );
 }
 

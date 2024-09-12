@@ -31,8 +31,6 @@ class TenderListView(generics.ListCreateAPIView):
     queryset = Tender.objects.all()
     serializer_class = TenderSerializer
 
-
-
     """
         Filters the queryset based on query parameters (purchase_type, announcement_type, date_from, date_to).
         This method applies filters to the tender list based on the request's query parameters.

@@ -1,5 +1,4 @@
-/* General Styling */
-body {
+body{
   font-family: 'Arial', sans-serif;
   background-color: #f4f4f9;
   color: #333;
@@ -24,7 +23,6 @@ h1 {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* General Container for Forms */
 .form-container {
   max-width: 400px;
   margin: 0 auto;
@@ -81,7 +79,6 @@ button:hover {
   background-color: #0056b3;
 }
 
-/* Table Styling */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -118,7 +115,6 @@ td a:hover {
   text-decoration: underline;
 }
 
-/* Filter Section Styling */
 .TenderFilter {
   margin-bottom: 20px;
   text-align: center;
@@ -136,7 +132,6 @@ select {
   border: 1px solid #ccc;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .App {
     padding: 10px;
@@ -198,27 +193,6 @@ select {
   font-size: 16px;
 }
 
-.clear-filters-button {
-  padding: 10px 20px;
-  background-color: #89a4b2;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.clear-filters-button:hover {
-  background-color: #494443;
-}
-
-.clear-filters-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-}
-
 .refresh-button-container {
   margin-top: 20px;
   display: flex;
@@ -246,7 +220,6 @@ select {
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
-/* Spinner CSS */
 .spinner {
   border: 8px solid #f3f3f3;
   border-top: 8px solid #3498db;
@@ -257,27 +230,74 @@ select {
   margin: 20px auto;
 }
 
-/* Animation for the spinner */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-/* Loading bar CSS */
 .loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 4px;
-  background-color: #3498db;
-  animation: load 1s infinite;
+  height: 5px;
+  background-color: #059ae9;
+  z-index: 9999;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
-@keyframes load {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+.loading-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #059ae9, transparent);
+  animation: loading 1s infinite;
 }
 
-.Charts {
-  margin-bottom: 100px;
+@keyframes loading {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.loading-bar-refresh {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px; 
+  z-index: 9999;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.loading-bar-refresh::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #059ae9, transparent);
+  animation: loading-refresh 1s infinite;
+}
+
+@keyframes loading-refresh {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
 body, html {
@@ -289,18 +309,19 @@ body, html {
 .header {
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
   background-color: #333;
   color: white;
   top: 0;
   width: 100%;
   z-index: 1000;
   box-sizing: border-box;
+  padding: 20px;
+  display: flex;
 }
 
 .title {
   margin: 0;
-  font-size: 20px;
+  font-size: 26px;
 }
 
 .logout-button {
@@ -327,4 +348,62 @@ body, html {
   text-align: center;
   padding: 10px;
   font-size: 16px;
+}
+.chart-container {
+  padding-bottom: 100px;
+}
+
+.button-cell {
+  text-align: center; 
+}
+
+.clear-filters-button,
+.refresh-button,
+.scroll-to-bottom-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.clear-filters-button {
+  background-color: #89a4b2;
+  color: white;
+}
+
+.clear-filters-button:hover {
+  background-color: #494443;
+}
+
+.refresh-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.refresh-button:hover {
+  background-color: #45a049;
+}
+
+.scroll-to-bottom-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.scroll-to-bottom-button:hover {
+  background-color: #0056b3;
+}
+
+.no-tenders-message {
+  color: #d9534f; /* Bootstrap's danger color, you can use any color you like */
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #d9534f;
+  border-radius: 5px;
+  background-color: #f9d6d5; /* Light background color */
 }
