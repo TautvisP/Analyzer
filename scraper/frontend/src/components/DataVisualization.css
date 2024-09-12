@@ -1,0 +1,16 @@
+/* DataVisualization.css */
+
+.chart-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between charts */
+    justify-content: center; /* Center charts horizontally */
+  }
+  
+  .chart {
+    flex: 1;
+    min-width: 300px; /* Minimum width for each chart */
+    max-width: 600px; /* Maximum width for each chart */
+    height: 400px; /* Fixed height for each chart */
+  }
+  

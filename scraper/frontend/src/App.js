@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import TenderFilter from './components/TenderFilter';
+import DataVisualization from './components/DataVisualization';
 import './App.css';
+
 
 function App() {
   const [tenders, setTenders] = useState([]);
@@ -83,7 +85,7 @@ function App() {
       <table>
         <thead>
           <tr>
-            <th>Pavadinimas</th>
+            <th>Skelbimo Pavadinimas</th>
             <th>Vykdytojas</th>
             <th>Paskelbimo Data</th>
             <th>Terminas</th>
@@ -109,6 +111,11 @@ function App() {
       )}
       <div className="refresh-button-container">
         <button className="refresh-button" onClick={handleRefresh}>Atnaujinti Duomenis</button>
+      </div>
+
+      <div class="Charts">
+      <h1>Duomenų Vizualizacija</h1>
+      <DataVisualization />
       </div>
     </div>
   );

@@ -7,6 +7,10 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.management import call_command
+from django.http import JsonResponse
+from django.db.models import Count
+from datetime import datetime, timedelta
+from .models import Tender
 
 class TenderListView(generics.ListCreateAPIView):
     print("Searching and returning all tenders")
@@ -54,3 +58,35 @@ def refresh_tenders(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+
+
+def get_statistics(request):
+    today = datetime.now()
+    one_week_ago = today - timedelta(weeks=1)
+    
+    # Filter tenders from the last week
+    recent_tenders = Tender.objects.filter(publication_date__gte=one_week_ago)
+    
+    # Get statistics for purchase types
+    purchase_type_stats = (
+        recent_tenders.values('purchase_type')
+        .annotate(count=Count('id'))
+        .order_by('purchase_type')
+    )
+    
+    # Get statistics for announcement types
+    announcement_type_stats = (
+        recent_tenders.values('announcement_type')
+        .annotate(count=Count('id'))
+        .order_by('announcement_type')
+    )
+    
+    # Convert querysets to dictionaries
+    purchase_type_stats_dict = {item['purchase_type']: item['count'] for item in purchase_type_stats}
+    announcement_type_stats_dict = {item['announcement_type']: item['count'] for item in announcement_type_stats}
+    
+    # Return JSON response
+    return JsonResponse({
+        'purchaseTypeStats': purchase_type_stats_dict,
+        'announcementTypeStats': announcement_type_stats_dict,
+    })
