@@ -15,7 +15,7 @@ const Register = () => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError('Slaptažodžiai nesutampa');
       return;
     }
 
@@ -24,7 +24,7 @@ const Register = () => {
       password
     })
     .then(response => {
-      console.log("User registered successfully");
+      console.log("Vartotojas priregistruotas sėkmingai");
       navigate('/login');
     })
     .catch(error => {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';  // Import useNavigate
+import { useNavigate, Link } from 'react-router-dom';  // Import useNavigate
 import { useAuth } from './AuthContext'; // Import useAuth
 
 const Login = () => {
@@ -27,11 +27,11 @@ const Login = () => {
   };
 
   return (
-    <div className="form-container">
-      <h1>Login</h1>
+<div className="form-container">
+      <h1>Prisijungti</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Username:</label>
+          <label>Vartotojo Vardas:</label>
           <input
             type="text"
             value={username}
@@ -40,7 +40,7 @@ const Login = () => {
           />
         </div>
         <div className="form-group">
-          <label>Password:</label>
+          <label>Slaptažodis:</label>
           <input
             type="password"
             value={password}
@@ -49,7 +49,8 @@ const Login = () => {
           />
         </div>
         {error && <p className="error-message">{error}</p>}
-        <button type="submit">Login</button>
+        <button type="submit">Prisijungti</button>
+        <p>Neturite paskyros? <Link to="/register">Registruotis</Link></p>
       </form>
     </div>
   );
