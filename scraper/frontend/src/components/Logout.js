@@ -1,19 +1,15 @@
-// Logout.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './AuthContext'; // Import useAuth from AuthContext
+import { useAuth } from './AuthContext'; // Import useAuth
 
 const Logout = () => {
   const navigate = useNavigate();
-  const { setIsAuthenticated } = useAuth(); // Access the setIsAuthenticated function
+  const { setIsAuthenticated } = useAuth();  // Access setIsAuthenticated from context
 
   const handleLogout = () => {
-    // Clear the token from localStorage
-    localStorage.removeItem('token');
-    // Update the authentication state
-    setIsAuthenticated(false);
-    // Redirect to the login page
-    navigate('/login');
+    localStorage.removeItem('token'); // Clear the token
+    setIsAuthenticated(false);  // Update authentication state
+    navigate('/login');  // Redirect to the login page
   };
 
   return (
