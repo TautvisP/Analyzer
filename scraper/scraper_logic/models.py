@@ -9,7 +9,7 @@ class Tender(models.Model):
     announcement_type = models.CharField(max_length=100)
     publication_date = models.DateField()
     submission_deadline = models.DateField()
-    cpv_code = models.CharField(max_length=100)
+    cpv_code = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.title

@@ -3,7 +3,13 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from .models import Tender
 
-# Function to scrape tender data from a specified URL
+"""
+    Function to scrape tender data from a specified URL
+    It is set to scrape 1500 tenders, so if the program is running for the first time, 
+    be prepaired, it can take up to 5 minutes, since theres quite a bit of data that it has to go and filter thru.
+    All of the other scrapes after the initial one will go until it meets the first tender that is already in the database,
+    that means that all other tenders below will also be stored.
+"""
 def scrape_tenders(url):
     tenders_added = False
     print("Im Scraping, please wait. If this is my first time scraping, be patient, I've got to scrape 1500 Tenders ;)")

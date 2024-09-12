@@ -25,9 +25,18 @@ const App = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const sortTendersByDate = (tenderList) => {
-    return tenderList.sort((a, b) => new Date(b.publication_date) - new Date(a.publication_date));
+    return tenderList.sort((a, b) => {
+      // Primary sort by publication date (descending)
+      const dateComparison = new Date(b.publication_date) - new Date(a.publication_date);
+      
+      // If publication dates are equal, sort by id (descending)
+      if (dateComparison === 0) {
+        return b.id - a.id;
+      }
+      
+      return dateComparison;
+    });
   };
-
   const fetchTenders = useCallback(() => {
     setLoading(true); 
     axios.get('http://127.0.0.1:8000/api/tenders/', {
