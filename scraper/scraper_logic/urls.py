@@ -8,7 +8,6 @@ urlpatterns = [
     path('tenders/', TenderListView.as_view(), name='tender-list'), 
     path('refresh-tenders/', refresh_tenders, name='refresh-tenders'),
     path('statistics/', get_statistics, name='get_statistics'),
-    #path('', TenderListView.as_view(), name='home'),
     path('', LoginView.as_view(), name='home'),
   
     

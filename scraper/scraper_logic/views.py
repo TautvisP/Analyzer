@@ -1,6 +1,6 @@
 from rest_framework import generics
 from .serializers import TenderSerializer
-from django.core.management import call_command  # To call the custom management command
+from django.core.management import call_command
 from django.utils.dateparse import parse_date
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -16,17 +16,27 @@ from .models import User
 from rest_framework.decorators import api_view
 from .serializers import UserSerializer
 
+"""
+    API view for listing and creating tenders.
+    This view handles GET requests to list tenders and if provided filter the list. 
+"""
 class TenderListView(generics.ListCreateAPIView):
     print("Searching and returning all tenders")
     
     try:
-       call_command('scrape_tenders')  # This triggers the command that scrapes tenders
+       call_command('scrape_tenders')  # This triggers the command that scrapes tenders, to gain new data
     except Exception as e:
        print(f"Error during scraping: {e}")
 
     queryset = Tender.objects.all()
     serializer_class = TenderSerializer
 
+
+
+    """
+        Filters the queryset based on query parameters (purchase_type, announcement_type, date_from, date_to).
+        This method applies filters to the tender list based on the request's query parameters.
+    """
     def get_queryset(self):
         queryset = super().get_queryset()
         purchase_type = self.request.query_params.get('purchase_type', '').strip()
@@ -52,7 +62,10 @@ class TenderListView(generics.ListCreateAPIView):
         #print(f"Filtered queryset: {queryset}")
         return queryset
 
-
+"""
+    Refreshes the list of tenders by triggering the custom management command to scrape new tenders.
+    This view handles POST requests to refresh the tender list.
+"""
 @csrf_exempt
 def refresh_tenders(request):
     if request.method == 'POST':
@@ -64,6 +77,10 @@ def refresh_tenders(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
 
 
+"""
+    Provides statistics on tenders from the last week.
+    This view calculates and returns statistics on purchase types and announcement types for tenders published within the last week.
+"""
 def get_statistics(request):
     today = datetime.now()
     one_week_ago = today - timedelta(weeks=1)
@@ -98,6 +115,10 @@ def get_statistics(request):
 #--------------------------------------------------------------------------------------------------------------------------#
 #User Authentication Views#
 
+"""
+    Serializer for user registration.
+    This serializer validates and creates a new user instance.
+"""
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -107,15 +128,22 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
+"""
+    API view for user registration.
+    This view handles POST requests to register new users.
+"""
 class RegisterView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()  # This ensures the user is saved to the database
+            user = serializer.save()
             return Response({'message': 'User registered successfully'}, status=201)
         return Response(serializer.errors, status=400)
 
-
+"""
+    API view for user login.
+    This view handles POST requests to authenticate users and return an authentication token.
+"""
 class LoginView(APIView):
     def post(self, request):
         username = request.data.get('username', '').strip()
@@ -125,7 +153,7 @@ class LoginView(APIView):
 
         # Authenticate the user
         user = authenticate(username=username, password=password)
-        print(f'Authentication result: {user}')  # Debug the result of authenticate()
+        print(f'Authentication result: {user}')
         
         if user is not None:
             print("User authenticated")
@@ -137,13 +165,21 @@ class LoginView(APIView):
         return Response({'error': 'Invalid credentials'}, status=400)
 
 
-
+"""
+    API view for user logout.
+    This view handles POST requests to log out the user and delete their authentication token.
+"""
 class LogoutView(APIView):
     def post(self, request):
         request.user.auth_token.delete()
         logout(request)
         return Response({'status': 'Logged out'})
     
+
+"""
+    Checks the authentication status of the user.
+    This view returns the user's authentication status based on whether they are logged in or not.
+"""
 @api_view(['GET'])
 def check_auth(request):
     if request.user.is_authenticated:

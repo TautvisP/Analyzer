@@ -2,24 +2,28 @@ from rest_framework import serializers
 from .models import Tender
 from django.contrib.auth.models import User
 
+# Serializer for the Tender model
 class TenderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tender
-        fields = '__all__'  # or specify the fields you want to include
+        fields = '__all__'  # Serialize all fields from the Tender model
 
+# Serializer for the User model
 class UserSerializer(serializers.ModelSerializer):
+    # Specify that password should be write-only
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['username', 'password', 'email']  # Include fields as needed
+        fields = ['username', 'password', 'email']  # Fields to be serialized
 
     def create(self, validated_data):
-        # Create the user with a hashed password
+        # Create a user instance with the provided data
         user = User.objects.create(
             username=validated_data['username'],
-            email=validated_data.get('email', '')  # Optional: handle email
+            email=validated_data.get('email', '')  # Handle optional email field
         )
-        user.set_password(validated_data['password'])  # Hash the password
+        # Set and hash the password before saving the user
+        user.set_password(validated_data['password'])
         user.save()
         return user
