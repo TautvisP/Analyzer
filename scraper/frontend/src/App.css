@@ -24,22 +24,61 @@ h1 {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Filter Section Styling */
-.TenderFilter {
-  margin-bottom: 20px;
+/* General Container for Forms */
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+.form-container h1 {
   text-align: center;
+  margin-bottom: 20px;
 }
 
-label {
-  margin-right: 10px;
-  font-weight: bold;
+.form-group {
+  margin-bottom: 15px;
 }
 
-select {
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
   padding: 8px;
-  margin-right: 20px;
+  border: 1px solid #ddd;
   border-radius: 4px;
-  border: 1px solid #ccc;
+}
+
+.form-group input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
 
 /* Table Styling */
@@ -77,6 +116,24 @@ td a {
 
 td a:hover {
   text-decoration: underline;
+}
+
+/* Filter Section Styling */
+.TenderFilter {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+select {
+  padding: 8px;
+  margin-right: 20px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }
 
 /* Responsive Design */
@@ -188,6 +245,7 @@ td a:hover {
   outline: none;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
+
 /* Spinner CSS */
 .spinner {
   border: 8px solid #f3f3f3;
@@ -219,5 +277,27 @@ td a:hover {
 }
 
 .Charts {
-  margin-bottom:100px;
+  margin-bottom: 100px;
+}
+
+
+.logout-button {
+  padding: 10px 20px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #e60000;
+}
+
+.logout-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
