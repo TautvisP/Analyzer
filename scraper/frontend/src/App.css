@@ -211,7 +211,7 @@ select {
 }
 
 .clear-filters-button:hover {
-  background-color: #d32f2f;
+  background-color: #494443;
 }
 
 .clear-filters-button:focus {
@@ -280,24 +280,51 @@ select {
   margin-bottom: 100px;
 }
 
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.header {
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+}
 
 .logout-button {
-  padding: 10px 20px;
-  background-color: #ff4d4d;
+  background-color: #d32f2f;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
+  padding: 8px 16px;
   cursor: pointer;
   font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
 }
 
 .logout-button:hover {
-  background-color: #e60000;
+  background-color: #b71c1c;
 }
 
-.logout-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-size: 16px;
 }

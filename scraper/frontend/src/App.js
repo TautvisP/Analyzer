@@ -1,3 +1,4 @@
+// App.js
 import React, { useState, useEffect, useCallback } from 'react'; 
 import axios from 'axios';
 import TenderFilter from './components/TenderFilter';
@@ -67,86 +68,80 @@ const App = () => {
   return (
     <AuthProvider>
       <Router>
-        <Routes>
-          {/* Login and Register Pages */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+        <header className="header">
+          <h1 className="title">Duomenų gavybos, apdorojimo ir vizualizavimo sistemos prototipas</h1>
+        </header>
+        <div className="App">
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route
+              path="/tenders"
+              element={
+                <PrivateRoute
+                  element={
+                    <div>
+                      <h1>Filtravimas</h1>
+                      <TenderFilter
+                        onPurchaseTypeChange={setPurchaseType}
+                        onAnnouncementTypeChange={setAnnouncementType}
+                        onDateFromChange={setDateFrom}
+                        onDateToChange={setDateTo}
+                      />
+                      <Logout/>
+                      <h1>Viešieji Pirkimai</h1>
 
-          {/* Default Route - Redirects to login */}
-          <Route path="/" element={<Navigate to="/login" />} />
-
-          {/* Protected Route - Tenders List */}
-          <Route
-            path="/tenders"
-            element={
-              <PrivateRoute
-                element={
-                  <div className="App">
-                    <Logout />
-                    <h1>Filtravimas</h1>
-                    <TenderFilter
-                      onPurchaseTypeChange={setPurchaseType}
-                      onAnnouncementTypeChange={setAnnouncementType}
-                      onDateFromChange={setDateFrom}
-                      onDateToChange={setDateTo}
-                    />
-
-                    <h1>Viešieji Pirkimai</h1>
-
-                    {/* Show loading bar while refreshing */}
-                    {refreshing && <div className="loading-bar"></div>}
-
-                    {/* Show loading spinner while fetching */}
-                    {loading && !refreshing && <div className="spinner"></div>}
-
-                    {/* Show loading message */}
-                    {loading && <p>Kraunamas pirkimų sąrašas, prašome palaukti...</p>}
-
-                    {/* Check if the tenders list is empty */}
-                    {!loading && tenders.length === 0 ? (
-                      <p>Su pasirinktais filtrais pirkimų nerasta</p>
-                    ) : (
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Skelbimo Pavadinimas</th>
-                          <th>Vykdytojas</th>
-                          <th>Paskelbimo Data</th>
-                          <th>Terminas</th>
-                          <th>BVPŽ Kodas</th>
-                          <th>Pirkimo Rūšis</th>
-                          <th>Skelbimo Tipas</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {tenders.map(tender => (
-                          <tr key={tender.id}>
-                            <td>{tender.title}</td>
-                            <td><a href={tender.bidder_link} target="_blank" rel="noopener noreferrer">{tender.bidder_name}</a></td>
-                            <td>{tender.publication_date}</td>
-                            <td>{tender.submission_deadline}</td>
-                            <td>{tender.cpv_code}</td>
-                            <td>{tender.announcement_type}</td>
-                            <td>{tender.purchase_type}</td>
+                      {refreshing && <div className="loading-bar"></div>}
+                      {loading && !refreshing && <div className="spinner"></div>}
+                      {loading && <p>Kraunamas pirkimų sąrašas, prašome palaukti...</p>}
+                      {!loading && tenders.length === 0 ? (
+                        <p>Su pasirinktais filtrais pirkimų nerasta</p>
+                      ) : (
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Skelbimo Pavadinimas</th>
+                            <th>Vykdytojas</th>
+                            <th>Paskelbimo Data</th>
+                            <th>Terminas</th>
+                            <th>BVPŽ Kodas</th>
+                            <th>Pirkimo Rūšis</th>
+                            <th>Skelbimo Tipas</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    )}
-                    <div className="refresh-button-container">
-                      <button className="refresh-button" onClick={handleRefresh}>Atnaujinti Duomenis</button>
+                        </thead>
+                        <tbody>
+                          {tenders.map(tender => (
+                            <tr key={tender.id}>
+                              <td>{tender.title}</td>
+                              <td><a href={tender.bidder_link} target="_blank" rel="noopener noreferrer">{tender.bidder_name}</a></td>
+                              <td>{tender.publication_date}</td>
+                              <td>{tender.submission_deadline}</td>
+                              <td>{tender.cpv_code}</td>
+                              <td>{tender.announcement_type}</td>
+                              <td>{tender.purchase_type}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      )}
+                      <div className="refresh-button-container">
+                        <button className="refresh-button" onClick={handleRefresh}>Atnaujinti Duomenis</button>
+                      </div>
+                      <div className="Charts">
+                        <h1>Duomenų Vizualizacija</h1>
+                        <DataVisualization />
+                      </div>
                     </div>
-
-                    <div className="Charts">
-                      <h1>Duomenų Vizualizacija</h1>
-                      <DataVisualization />
-                    </div>
-                  </div>
-                }
-              />
-            }
-          />
-        </Routes>
+                  }
+                />
+              }
+            />
+          </Routes>
+          <div className="bottom-bar">
+            Užsakovas UAB "Analyzeris 007"
+          </div>
+        </div>
       </Router>
     </AuthProvider>
   );
