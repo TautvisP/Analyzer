@@ -85,7 +85,7 @@ function App() {
       <table>
         <thead>
           <tr>
-            <th>Pavadinimas</th>
+            <th>Skelbimo Pavadinimas</th>
             <th>Vykdytojas</th>
             <th>Paskelbimo Data</th>
             <th>Terminas</th>
@@ -113,9 +113,10 @@ function App() {
         <button className="refresh-button" onClick={handleRefresh}>Atnaujinti Duomenis</button>
       </div>
 
-      <h1>Data Visualization</h1>
+      <div class="Charts">
+      <h1>Duomenų Vizualizacija</h1>
       <DataVisualization />
-      
+      </div>
     </div>
   );
 }

@@ -23,13 +23,12 @@ function DataVisualization() {
       .then(response => {
         const { purchaseTypeStats, announcementTypeStats } = response.data;
 
-        // Ensure data is defined and is an object
         if (purchaseTypeStats && announcementTypeStats) {
           setData({
             purchaseTypeData: {
               labels: Object.keys(purchaseTypeStats),
               datasets: [{
-                label: 'Announcements per Week by Purchase Type',
+                label: 'Skelbimų Kiekis Per Savaitę Pagal Pirkimo Rūšį',
                 data: Object.values(purchaseTypeStats),
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
@@ -39,7 +38,7 @@ function DataVisualization() {
             announcementTypeData: {
               labels: Object.keys(announcementTypeStats),
               datasets: [{
-                label: 'Announcements per Week by Announcement Type',
+                label: 'Skelbimų Kiekis Per Savaitę Pagal Skelbimų Tipą',
                 data: Object.values(announcementTypeStats),
                 backgroundColor: 'rgba(153, 102, 255, 0.2)',
                 borderColor: 'rgba(153, 102, 255, 1)',
@@ -54,18 +53,28 @@ function DataVisualization() {
       });
   }, []);
 
+    // Define chart options with legend turned off
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false // Turn off the legend
+          }
+        }
+      };
   return (
     <div className="chart-container">
-      <div className="chart">
-        <h2>Announcements per Week by Purchase Type</h2>
-        <Bar data={data.purchaseTypeData} options={{ responsive: true, maintainAspectRatio: false }} />
-      </div>
-
-      <div className="chart">
-        <h2>Announcements per Week by Announcement Type</h2>
-        <Bar data={data.announcementTypeData} options={{ responsive: true, maintainAspectRatio: false }} />
-      </div>
+    <div className="chart">
+      <h2>Skelbimų Kiekis Per Savaitę Pagal Pirkimo Rūšį</h2>
+      <Bar data={data.purchaseTypeData} options={chartOptions} />
     </div>
+
+    <div className="chart">
+      <h2>Skelbimų Kiekis Per Savaitę Pagal Skelbimų Tipą</h2>
+      <Bar data={data.announcementTypeData} options={chartOptions} />
+    </div>
+  </div>
   );
 }
 
