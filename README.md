@@ -28,7 +28,7 @@ To run the project, you will need to have certaint Python packages. I‘ve gener
 
 Also a database is needed. I used web server solution stack tool “XAMPP” and an administration of MySQL tool “phpMyAdmin”, but you are free to use whatever you like. Just create a database with the name “analyzer_database”, create a user with the username of “bandymas” and password “bandymas” and give the user permissions to the database. Once the database is created and configured, next step is to set up the database schema using Django's migration system. Navigate to `\Analyzer\scraper` and type the following commands: `python3 manage.py makemigrations` and `python3 manage.py migrate`.
  
-7. Apply migrations and run the server:
+6. Apply migrations and run the server:
 To run the backend, navigate to `\Analyzer\scraper` and type `python3 manage.py runserver`.
 
 ### For the frontend
@@ -103,3 +103,18 @@ Ensure the application is functioning correctly by testing key features such as 
   
 ### 5. Conclusion
 After executing these tests and resolving any major issues, the project will be considered ready for deployment.
+
+
+## Visuals
+<img src="https://github.com/user-attachments/assets/ee187ba5-97af-4e6f-a322-b959f9175b95" width="900">
+
+
+
+<img src="https://github.com/user-attachments/assets/63b9178f-6aa8-4ddb-b8e6-dfecf7cd4f45" width="900">
+
+
+<img src="https://github.com/user-attachments/assets/6892c70c-47b1-4456-8052-761077dc42d9" width="900">
+
+
+<img src="https://github.com/user-attachments/assets/63b4a1f8-6143-49cd-8f71-c1c463de606f" width="900">
+
