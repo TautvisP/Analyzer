@@ -69,14 +69,15 @@ def scrape_tenders(url):
                 cpv_code, purchase_type = scrape_additional_info(full_link)
 
                 # Skip this tender if essential additional information is missing
-                if not cpv_code or not purchase_type:
+                if not cpv_code or not purchase_type or not submission_deadline:
                     print(f"Skipping tender {title} due to missing additional info.")
                     continue
 
                 # Check if the tender already exists in the database to avoid duplicates
-                if Tender.objects.filter(cpv_code=cpv_code).exists():
-                    print(f"Tender {title} with code {cpv_code} already exists. Stopping further scraping.")
+                if Tender.objects.filter(title=title, bidder_name=bidder_name, cpv_code=cpv_code).exists():
+                    print(f"Tender '{title}' from bidder '{bidder_name}' with code '{cpv_code}' already exists. Stopping further scraping.")
                     break
+
 
                 # Create and save a new Tender object to the database
                 tender = Tender(
